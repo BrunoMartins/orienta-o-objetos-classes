@@ -1,9 +1,15 @@
+import { Personagem } from '../modules/personagem.js'
+import { mostrarModal } from '../components/modal.js'
+
 export class PersonagemView {
     personagens//usando para passar o array contendo os personagens que serão utilizados como parâmetros na função
+    personagensSelecionados
 
     constructor(personagens) {
         this.ulPersonagens = document.querySelector('ul#personagens')
         this.personagens = personagens
+        this.personagensSelecionados = []
+        this.escutarEventoDuelo()
     }
 
     render() {
@@ -16,11 +22,11 @@ export class PersonagemView {
 
     criaPersonagem = (personagem) => {
         const personagemLI = document.createElement('li')
-        personagemLI.classList.add('personagem', personagem.tipo)
+        personagemLI.classList.add('personagem', personagem.constructor.tipo)
 
-        //const estaSelecionado = this.personagensSelecionados.indexOf(personagem) !== -1 //sintaxe para quando encontra no array
+        const estaSelecionado = this.personagensSelecionados.indexOf(personagem) !== -1 //Se o índice for diferente de -1, significa que o personagem está selecionado e a expressão retorna true. Caso contrário, retorna false, indicando que o personagem não está selecionado.
 
-        //if (estaSelecionado) personagemLI.classList.add('selecionado')
+        if (estaSelecionado) personagemLI.classList.add('selecionado')
 
         personagemLI.innerHTML =
 
@@ -37,14 +43,14 @@ export class PersonagemView {
             <div class="container-imagem">
                 <div class="imagem"></div>
                 <div class="container-tipo">
-                    <h2 class="tipo">${personagem.tipo}</h2>
+                    <h2 class="tipo">${personagem.constructor.tipo}</h2>
                 </div>
             </div>
             <div class="container-nome">
                 <h3 class="nome">${personagem.nome}</h3>
             </div>
             <div class="container-descricao">
-                <p class="descricao"></p>
+            <p class="descricao">${ personagem.constructor.descricao }</p>
             </div>
         </div>
         <div class="container-inferior">
@@ -56,19 +62,19 @@ export class PersonagemView {
         </div>
         `
 
-        /*const containerLevel = personagemLI.querySelector('.level')
+        const containerLevel = personagemLI.querySelector('.level')
         containerLevel.onclick = (evt) => {
-            evt.stopPropagation()
+            evt.stopPropagation()//usado para evitar que a carta seja selecionada
 
             if (evt.target.classList.contains('diminuir-level')) personagem.diminuirLevel()
 
             if (evt.target.classList.contains('aumentar-level')) personagem.aumentarLevel()
 
             this.render()
-        }*/
+        }
 
 
-        /*personagemLI.onclick = () => {
+        personagemLI.onclick = () => {
             const jaTem2Selecionados = this.personagensSelecionados.length === 2
             if (!jaTem2Selecionados || estaSelecionado) {
                 personagemLI.classList.toggle('selecionado')
@@ -77,13 +83,13 @@ export class PersonagemView {
 
                 this.removeSelecao(personagem)
             }
-        }*/
+        }
 
         return personagemLI
     }
 
 
-    /*adicionaSelecao = (personagem) => {
+    adicionaSelecao = (personagem) => {
         this.personagensSelecionados.push(personagem)
         this.render()
     }
@@ -109,5 +115,5 @@ export class PersonagemView {
 
             this.render()
         })
-    }*/
+    }
 }
